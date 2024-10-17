@@ -3,7 +3,7 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  todos: string[];
+  blogs: string[];
 }
 
 export interface UserSignUpData {
@@ -25,7 +25,7 @@ export interface SignUpResponse {
     email: string;
     createdAt: string;
     updatedAt: string;
-    todos: [];
+    blogs: [];
     _id: string;
   };
 }
@@ -45,7 +45,7 @@ export interface SignInResponse {
     email: string;
     createdAt: string;
     updatedAt: string;
-    todos: [];
+    blogs: [];
     _id: string;
   };
 }
@@ -63,7 +63,7 @@ declare module "*.png" {
   export = value;
 }
 
-export interface CreateTodoResponse {
+export interface CreateBlogResponse {
   _id: string;
   title: string;
   description: string;
@@ -74,7 +74,7 @@ export interface CreateTodoResponse {
   message: string;
 }
 
-export interface Todo {
+export interface Blog {
   _id: string;
   title: string;
   description: string;
@@ -82,16 +82,16 @@ export interface Todo {
   userId: string;
   createdAt: string;
   updatedAt: string;
-  todos?: Todo[];
+  blogs?: Blog[];
 }
 
 
-export interface AddTodoData {
+export interface AddBlogData {
   title: string;
   description: string;
 }
 
 interface ImportMetaEnv {
   VITE_AUTH_URL: string;
-  VITE_TODOS_URL: string;
+  VITE_BLOGS_URL: string;
 }

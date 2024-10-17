@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AddTodo, Home, SignIn, SignUp } from "./pages";
+import { AddBlog, Home, SignIn, SignUp } from "./pages";
 import { Header, ProtectRoute, PublicRoute } from "./components";
 import React from "react";
 
@@ -25,10 +25,10 @@ const App = () => {
           }
         />
         <Route
-          path="/add/todo"
+          path="/add/blog"
           element={
             <ProtectRoute>
-              <AddTodo />
+              <AddBlog />
             </ProtectRoute>
           }
         />

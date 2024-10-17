@@ -1,19 +1,19 @@
 import React, { ChangeEvent, FC, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ScreenSpinner, UpdateTodoModal, UsePageTitle } from "../components";
+import { ScreenSpinner, UpdateBlogModal, UsePageTitle } from "../components";
 import { MailRoundedIcon, MdOutlineDescription } from "../icons";
 import { toast } from "react-hot-toast";
-import { AddTodoData, CreateTodoResponse, SignInError } from "../vite-env";
-import { useCreateTodoMutation, useGetTodosQuery, useUpdateTodoMutation } from "../redux/todoApi";
+import { AddBlogData, CreateBlogResponse, SignInError } from "../vite-env";
+import { useCreateBlogMutation, useGetBlogsQuery, useUpdateBlogMutation } from "../redux/blogApi";
 import BlogEditor from "../components/BlogEditor";
 
-const AddTodo: FC = () => {
-  UsePageTitle("Todo");
+const AddBlog: FC = () => {
+  UsePageTitle("Blog");
   const navigate = useNavigate();
 
-  const [createTodo, { isLoading }] = useCreateTodoMutation();
+  const [createBlog, { isLoading }] = useCreateBlogMutation();
 
-  const [formData, setFormData] = useState<AddTodoData>({
+  const [formData, setFormData] = useState<AddBlogData>({
     title: "",
     description: "",
   });
@@ -38,12 +38,12 @@ const AddTodo: FC = () => {
 
   const handleSubmit = async (title: string) => {
     // e.preventDefault();
-    const response = await createTodo({
+    const response = await createBlog({
       title: title,
       description: formData.description
     });
     if ("data" in response) {
-      const { message } = response.data as unknown as CreateTodoResponse;
+      const { message } = response.data as unknown as CreateBlogResponse;
       toast.success(message, {
         duration: 2000,
       });
@@ -71,29 +71,29 @@ const AddTodo: FC = () => {
   };
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateTodoMutation, { isLoading: UpdateTodoLoading }] = useUpdateTodoMutation();
-  const [selectedTodo, setSelectedTodo] = useState<CreateTodoResponse | null>(null);
-  const { isLoading: getTodoLoading, data, refetch } = useGetTodosQuery();
+  const [updateBlogMutation, { isLoading: UpdateBlogLoading }] = useUpdateBlogMutation();
+  const [selectedBlog, setSelectedBlog] = useState<CreateBlogResponse | null>(null);
+  const { isLoading: getBlogLoading, data, refetch } = useGetBlogsQuery();
 
   return (
     <div className="flex justify-center items-center bg-gray-100 px-6">
       {!ready && <ScreenSpinner />}
       <BlogEditor onReady={onReady} onExport={onExport} />
 
-      <UpdateTodoModal
+      <UpdateBlogModal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        onUpdateTodo={(updatedTodo) => {
-          // updateTodoMutation({
-          //   id: selectedTodo?._id || "",
-          //   todoData: updatedTodo,
+        onUpdateBlog={(updatedBlog) => {
+          // updateBlogMutation({
+          //   id: selectedBlog?._id || "",
+          //   blogData: updatedBlog,
           // });
           setIsUpdateModalOpen(false);
           
-          handleSubmit(updatedTodo.title);
+          handleSubmit(updatedBlog.title);
         }}
-        initialTodo={selectedTodo}
-        UpdateTodoLoading={UpdateTodoLoading}
+        initialBlog={selectedBlog}
+        UpdateBlogLoading={UpdateBlogLoading}
         refetch={refetch}
       />
     </div>
@@ -102,7 +102,7 @@ const AddTodo: FC = () => {
 
     //   <div className="w-[26rem] p-14 shadow-md hover:shadow-xl rounded-md bg-white">
     //     <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
-    //       Add Todo
+    //       Add Blog
     //     </h2>
     //     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
     //       <div className="w-full relative">
@@ -151,4 +151,4 @@ const AddTodo: FC = () => {
   );
 };
 
-export default AddTodo;
+export default AddBlog;

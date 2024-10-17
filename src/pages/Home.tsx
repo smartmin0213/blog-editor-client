@@ -2,17 +2,17 @@ import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {
-  useCompleteTodoMutation,
-  useDeleteTodoMutation,
-  useGetTodosQuery,
-  useUpdateTodoMutation,
-} from "../redux/todoApi";
+  useCompleteBlogMutation,
+  useDeleteBlogMutation,
+  useGetBlogsQuery,
+  useUpdateBlogMutation,
+} from "../redux/blogApi";
 import {
-  DeleteTodoModal,
+  DeleteBlogModal,
   ScreenSpinner,
   UsePageTitle,
-  UpdateTodoModal} from "../components";
-import { CreateTodoResponse, Todo } from "../vite-env";
+  UpdateBlogModal} from "../components";
+import { CreateBlogResponse, Blog } from "../vite-env";
 import {
   AiOutlineCheckSquare,
   LiaEdit,
@@ -23,44 +23,44 @@ import React from "react";
 import toast from "react-hot-toast";
 import BlogEditor from "../components/BlogEditor";
 import Cookies from "js-cookie";
-import { todosBaseUrl } from '../api';
+import { blogsBaseUrl } from '../api';
 
 const Home = () => {
   UsePageTitle("Home");
 
-  const { isLoading: getTodoLoading, data, refetch } = useGetTodosQuery();
+  const { isLoading: getBlogLoading, data, refetch } = useGetBlogsQuery();
 
-  const [deleteTodoMutation, { isLoading: DeleteTodoLoading }] =
-    useDeleteTodoMutation();
+  const [deleteBlogMutation, { isLoading: DeleteBlogLoading }] =
+    useDeleteBlogMutation();
 
-  const [updateTodoMutation, { isLoading: UpdateTodoLoading }] =
-    useUpdateTodoMutation();
+  const [updateBlogMutation, { isLoading: UpdateBlogLoading }] =
+    useUpdateBlogMutation();
 
-  const [completeTodoMutation] = useCompleteTodoMutation();
+  const [completeBlogMutation] = useCompleteBlogMutation();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
-  const [selectedTodo, setSelectedTodo] = useState<CreateTodoResponse | null>(
+  const [blogToDelete, setBlogToDelete] = useState<string | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<CreateBlogResponse | null>(
     null
   );
 
-  const handleDeleteConfirmation = (todoId: string) => {
-    setTodoToDelete(todoId);
+  const handleDeleteConfirmation = (blogId: string) => {
+    setBlogToDelete(blogId);
     setIsDeleteModalOpen(true);
   };
 
-  const handleUpdateTodo = (todo: CreateTodoResponse) => {
-    setSelectedTodo(todo);
+  const handleUpdateBlog = (blog: CreateBlogResponse) => {
+    setSelectedBlog(blog);
     setIsUpdateModalOpen(true);
   };
 
-  const handleDeleteTodo = async () => {
+  const handleDeleteBlog = async () => {
     try {
-      if (todoToDelete) {
-        await deleteTodoMutation(todoToDelete);
+      if (blogToDelete) {
+        await deleteBlogMutation(blogToDelete);
       }
-      setTodoToDelete(null);
+      setBlogToDelete(null);
       setIsDeleteModalOpen(false);
       refetch();
     } catch (error) {
@@ -70,11 +70,11 @@ const Home = () => {
     }
   };
 
-  const handleCompleteTodo = async (todoId: string) => {
+  const handleCompleteBlog = async (blogId: string) => {
     try {
-      await completeTodoMutation(todoId);
+      await completeBlogMutation(blogId);
       await refetch();
-      toast.success("Todo Status Changes", {
+      toast.success("Blog Status Changes", {
         duration: 2000,
       });
     } catch (error) {
@@ -84,58 +84,61 @@ const Home = () => {
     }
   };
 
-  const todos = data?.todos || [];
+  const blogs = data?.blogs || [];
 
   const handleGetBlog = _id => {
     const token = Cookies.get("token");
-    const url = `${todosBaseUrl}preview/${_id}?authToken=${token}`; // Replace with your API endpoint
+    const url = `${blogsBaseUrl}preview/${_id}?authToken=${token}`; // Replace with your API endpoint
     window.open(url, '_blank');
   };
 
   return (
     <div className="flex flex-wrap gap-8 p-4 items-center justify-center">
-      {getTodoLoading && <ScreenSpinner />}
+      {getBlogLoading && <ScreenSpinner />}
 
-      {todos.length !== 0 && <p className="text-2xl font-bold w-4/5">My Blogs</p>}
+      {blogs.length !== 0 && <p className="text-2xl font-bold w-4/5">My Blogs</p>}
 
-      {todos.length === 0 ? (
+      {blogs.length === 0 ? (
         <p className="text-2xl font-bold">No Blogs Available</p>
       ) : (
-        todos.map((todo: Todo) => {
+        blogs.map((blog: Blog) => {
           return (
-            <div className="shadow-md hover:shadow-xl" key={todo._id} onClick={() => handleGetBlog(todo._id)}>
+            <div className="shadow-md hover:shadow-xl" key={blog._id} onClick={() => handleGetBlog(blog._id)}>
               <Card sx={{ width: '80vw'}}>
                 <CardContent className="flex flex-col gap-3 cursor-pointer">
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="text-xl font-bold flex items-center">
-                        {todo.title}
+                        {blog.title}
                       </p>
                     </div>
                     <div className="flex gap-1 items-center">
                       {/* <button
                         title="Complete"
-                        onClick={() => handleCompleteTodo(todo._id)}
+                        onClick={() => handleCompleteBlog(blog._id)}
                         className="text-indigo-900 cursor-pointer"
                       >
-                        {todo.isCompleted ? (
+                        {blog.isCompleted ? (
                           <AiOutlineCheckSquare size={22} />
                         ) : (
                           <MdOutlineCheckBoxOutlineBlank size={22} />
                         )}
-                      </button>
+                      </button> */}
 
                       <button
                         title="Update"
                         className="text-indigo-900 cursor-pointer"
-                        onClick={() => handleUpdateTodo(todo)}
+                        onClick={(e) => {
+                          handleUpdateBlog(blog)
+                          e.stopPropagation()
+                        }}
                       >
                         <LiaEdit size={22} />
-                      </button> */}
+                      </button>
                       <button
                         title="Delete"
                         onClick={(e) => {
-                          handleDeleteConfirmation(todo._id)
+                          handleDeleteConfirmation(blog._id)
                           e.stopPropagation();
                         }}
                         className="text-red-900 cursor-pointer"
@@ -145,7 +148,7 @@ const Home = () => {
                     </div>
                   </div>
                   {/* <p className="text-sm text-justify font-medium flex items-center justify-center">
-                    {todo.description}
+                    {blog.description}
                   </p> */}
                 </CardContent>
               </Card>
@@ -154,25 +157,25 @@ const Home = () => {
         })
       )}
 
-      <DeleteTodoModal
+      <DeleteBlogModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        onConfirmDelete={handleDeleteTodo}
-        DeleteTodoLoading={DeleteTodoLoading}
+        onConfirmDelete={handleDeleteBlog}
+        DeleteBlogLoading={DeleteBlogLoading}
       />
 
-      <UpdateTodoModal
+      <UpdateBlogModal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        onUpdateTodo={(updatedTodo) => {
-          updateTodoMutation({
-            id: selectedTodo?._id || "",
-            todoData: updatedTodo,
+        onUpdateBlog={(updatedBlog) => {
+          updateBlogMutation({
+            id: selectedBlog?._id || "",
+            blogData: updatedBlog,
           });
           setIsUpdateModalOpen(false);
         }}
-        initialTodo={selectedTodo}
-        UpdateTodoLoading={UpdateTodoLoading}
+        initialBlog={selectedBlog}
+        UpdateBlogLoading={UpdateBlogLoading}
         refetch={refetch}
       />
     </div>

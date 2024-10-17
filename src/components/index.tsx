@@ -4,8 +4,8 @@ import ScreenSpinner from "./ScreenSpinner";
 import ButtonSpinner from "./ButtonSpinner";
 import ProtectRoute from "./ProtectRoute";
 import PublicRoute from "./PublicRoute";
-import DeleteTodoModal from "./DeleteTodoModal";
-import UpdateTodoModal from "./UpdateTodoModal";
+import DeleteBlogModal from "./DeleteBlogModal";
+import UpdateBlogModal from "./UpdateBlogModal";
 
 export {
   Header,
@@ -14,6 +14,6 @@ export {
   ButtonSpinner,
   ProtectRoute,
   PublicRoute,
-  DeleteTodoModal,
-  UpdateTodoModal,
+  DeleteBlogModal,
+  UpdateBlogModal,
 };

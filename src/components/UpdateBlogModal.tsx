@@ -3,43 +3,43 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import TextField from "@mui/material/TextField";
-import { CreateTodoResponse } from "../vite-env";
+import { CreateBlogResponse } from "../vite-env";
 import { Button } from "@mui/material";
 import ButtonSpinner from "./ButtonSpinner";
 
-interface UpdateTodoModalProps {
+interface UpdateBlogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpdateTodo: (updatedTodo: Partial<CreateTodoResponse>) => void;
-  initialTodo: CreateTodoResponse | null;
-  UpdateTodoLoading: boolean;
+  onUpdateBlog: (updatedBlog: Partial<CreateBlogResponse>) => void;
+  initialBlog: CreateBlogResponse | null;
+  UpdateBlogLoading: boolean;
   refetch: () => void;
 }
 
-const UpdateTodoModal: FC<UpdateTodoModalProps> = ({
+const UpdateBlogModal: FC<UpdateBlogModalProps> = ({
   isOpen,
   onClose,
-  onUpdateTodo,
-  initialTodo,
-  UpdateTodoLoading,
+  onUpdateBlog,
+  initialBlog,
+  UpdateBlogLoading,
   refetch,
 }) => {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedDescription, setUpdatedDescription] = useState("");
 
   useEffect(() => {
-    if (initialTodo) {
-      setUpdatedTitle(initialTodo.title);
-      setUpdatedDescription(initialTodo.description);
+    if (initialBlog) {
+      setUpdatedTitle(initialBlog.title);
+      setUpdatedDescription(initialBlog.description);
     }
-  }, [initialTodo]);
+  }, [initialBlog]);
 
   const handleUpdate = () => {
-    const updatedTodo: Partial<CreateTodoResponse> = {
+    const updatedBlog: Partial<CreateBlogResponse> = {
       title: updatedTitle,
       description: updatedDescription,
     };
-    onUpdateTodo(updatedTodo);
+    onUpdateBlog(updatedBlog);
     onClose();
 
     setUpdatedTitle('');
@@ -84,11 +84,11 @@ const UpdateTodoModal: FC<UpdateTodoModalProps> = ({
           variant="contained"
           onClick={handleUpdate}
         >
-          {UpdateTodoLoading ? <ButtonSpinner /> : "Save"}
+          {UpdateBlogLoading ? <ButtonSpinner /> : "Save"}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default UpdateTodoModal;
+export default UpdateBlogModal;

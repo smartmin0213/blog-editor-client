@@ -1,7 +1,7 @@
 import  { useEffect } from "react";
 
 const UsePageTitle = (dynamicPart: string) => {
-  const baseTitle = "Todo";
+  const baseTitle = "Blog";
 
   useEffect(() => {
     document.title = `${baseTitle} | ${dynamicPart}`;

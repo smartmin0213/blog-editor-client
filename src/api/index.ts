@@ -1,6 +1,6 @@
 const authBaseUrl = import.meta.env.VITE_AUTH_URL;
 
-const todosBaseUrl = import.meta.env.VITE_TODOS_URL;
+const blogsBaseUrl = import.meta.env.VITE_BLOGS_URL;
 
-export { authBaseUrl, todosBaseUrl };
+export { authBaseUrl, blogsBaseUrl };
     

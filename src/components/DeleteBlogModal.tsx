@@ -5,22 +5,22 @@ import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
 import ButtonSpinner from "./ButtonSpinner";
 
-interface DeleteTodoModalProps {
+interface DeleteBlogModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirmDelete: () => void;
-  DeleteTodoLoading: boolean
+  DeleteBlogLoading: boolean
 }
 
-const DeleteTodoModal: React.FC<DeleteTodoModalProps> = ({
+const DeleteBlogModal: React.FC<DeleteBlogModalProps> = ({
   isOpen,
   onClose,
   onConfirmDelete,
-  DeleteTodoLoading,
+  DeleteBlogLoading,
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogContent className="mt-1">Are you sure you want to delete this todo?</DialogContent>
+      <DialogContent className="mt-1">Are you sure you want to delete this blog?</DialogContent>
       <DialogActions className="flex gap-1 mt-4">
         <Button
           sx={{ textTransform: "none" }}
@@ -38,11 +38,11 @@ const DeleteTodoModal: React.FC<DeleteTodoModalProps> = ({
           size="small"
           color="error"
         >
-          {DeleteTodoLoading ? <ButtonSpinner /> : "Delete"}
+          {DeleteBlogLoading ? <ButtonSpinner /> : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default DeleteTodoModal;
+export default DeleteBlogModal;

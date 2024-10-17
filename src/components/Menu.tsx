@@ -46,7 +46,7 @@ const Menu: FC<MenuProps> = ({ closeMenu }) => {
       )}
       {token && (
         <Link
-          to={"/add/todo"}
+          to={"/add/blog"}
           className="relative cursor-pointer hover:bg-gray-700 p-2 rounded-md flex items-center gap-1"
           onClick={handleClickMenuItem}
         >
