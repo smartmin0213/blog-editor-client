@@ -51,7 +51,7 @@ const Menu: FC<MenuProps> = ({ closeMenu }) => {
           onClick={handleClickMenuItem}
         >
           <AddRoundedIcon fontSize="small" />
-          <span className="text-sm"> New Blog</span>
+          <span className="text-sm"> Add Blog</span>
           <span className="absolute"></span>
         </Link>
       )}

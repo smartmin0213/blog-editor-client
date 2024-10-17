@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import BlogEditor from "../components/BlogEditor";
 import Cookies from "js-cookie";
 import { blogsBaseUrl } from '../api';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   UsePageTitle("Home");
@@ -92,6 +93,8 @@ const Home = () => {
     window.open(url, '_blank');
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-wrap gap-8 p-4 items-center justify-center">
       {getBlogLoading && <ScreenSpinner />}
@@ -129,8 +132,10 @@ const Home = () => {
                         title="Update"
                         className="text-indigo-900 cursor-pointer"
                         onClick={(e) => {
-                          handleUpdateBlog(blog)
-                          e.stopPropagation()
+                          // handleUpdateBlog(blog)
+                          localStorage.setItem("blog", JSON.stringify(blog));
+                          navigate("/edit/blog");
+                          e.stopPropagation();
                         }}
                       >
                         <LiaEdit size={22} />

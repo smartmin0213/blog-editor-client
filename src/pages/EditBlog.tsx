@@ -7,8 +7,8 @@ import { AddBlogData, CreateBlogResponse, SignInError } from "../vite-env";
 import { useCreateBlogMutation, useGetBlogsQuery, useUpdateBlogMutation } from "../redux/blogApi";
 import BlogEditor from "../components/BlogEditor";
 
-const AddBlog: FC = () => {
-  UsePageTitle("Add");
+const EditBlog: FC = () => {
+  UsePageTitle("Edit");
   const navigate = useNavigate();
 
   const [createBlog, { isLoading }] = useCreateBlogMutation();
@@ -62,12 +62,36 @@ const AddBlog: FC = () => {
   const [ready, setReady] = useState(false);
   const onReady = () => setReady(true);
 
-  const onExport = (description: any) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      description: description
-    }));
-    setIsUpdateModalOpen(true);
+  const blog = JSON.parse(localStorage.getItem("blog"));
+
+  const onExport = async (description: any) => {
+    // setFormData((prevData) => ({
+    //   ...prevData,
+    //   description: description
+    // }));
+    // setIsUpdateModalOpen(true);
+    const response = await updateBlogMutation({
+      id: blog._id,
+      blogData: {
+        title: blog.title,
+        description: description
+      }
+    });
+    if ("data" in response) {
+      const { message } = response.data as unknown as CreateBlogResponse;
+      toast.success(message, {
+        duration: 2000,
+      });
+      navigate("/");
+    }
+    if ("error" in response) {
+      const {
+        data: { message },
+      } = response.error as SignInError;
+      toast.error(message, {
+        duration: 2000,
+      });
+    }
   };
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -78,7 +102,7 @@ const AddBlog: FC = () => {
   return (
     <div className="flex justify-center items-center bg-gray-100 px-6">
       {!ready && <ScreenSpinner />}
-      <BlogEditor onReady={onReady} onExport={onExport} />
+      <BlogEditor onReady={onReady} onExport={onExport} templateDesign={JSON.parse(blog.description).design} />
 
       <UpdateBlogModal
         isOpen={isUpdateModalOpen}
@@ -151,4 +175,4 @@ const AddBlog: FC = () => {
   );
 };
 
-export default AddBlog;
+export default EditBlog;
