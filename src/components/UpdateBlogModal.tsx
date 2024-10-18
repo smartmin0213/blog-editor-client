@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC, useRef, KeyboardEvent } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -26,7 +26,9 @@ const UpdateBlogModal: FC<UpdateBlogModalProps> = ({
 }) => {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [updatedDescription, setUpdatedDescription] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null); // Ensure ref type is correct
 
+  // Set initial blog details when the modal opens
   useEffect(() => {
     if (initialBlog) {
       setUpdatedTitle(initialBlog.title);
@@ -39,21 +41,45 @@ const UpdateBlogModal: FC<UpdateBlogModalProps> = ({
       title: updatedTitle,
       description: updatedDescription,
     };
+    console.log("Updated Blog:", updatedBlog);
     onUpdateBlog(updatedBlog);
-    onClose();
+    onClose(); // Close the modal after updating
 
-    setUpdatedTitle('');
-    // refetch();
+    // Clear the input fields only after updating
+    setTimeout(() => {
+      setUpdatedTitle("");
+      setUpdatedDescription("");
+    }, 0);
   };
+
+  // Handle key presses (Enter for Save, Esc for Cancel)
+  const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent default form submission behavior
+      handleUpdate();
+    } else if (e.key === "Escape") {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus(); // Focus the input when modal opens
+    }
+  }, [isOpen]);
 
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="xs" fullWidth>
       <p className="flex justify-center text-2xl font-semibold py-6">
         Add Blog
       </p>
-      <DialogContent className="flex flex-col gap-8">
+      <DialogContent
+        className="flex flex-col gap-8"
+        onKeyDown={handleKeyPress} // Attach keydown listener to the content
+      >
         <TextField
           label="Title"
+          inputRef={inputRef}
           fullWidth
           value={updatedTitle}
           onChange={(e) => setUpdatedTitle(e.target.value)}
@@ -83,6 +109,7 @@ const UpdateBlogModal: FC<UpdateBlogModalProps> = ({
           sx={{ textTransform: "none" }}
           variant="contained"
           onClick={handleUpdate}
+          disabled={UpdateBlogLoading}
         >
           {UpdateBlogLoading ? <ButtonSpinner /> : "Save"}
         </Button>
