@@ -11,7 +11,8 @@ import {
   DeleteBlogModal,
   ScreenSpinner,
   UsePageTitle,
-  UpdateBlogModal} from "../components";
+  UpdateBlogModal
+} from "../components";
 import { CreateBlogResponse, Blog } from "../vite-env";
 import {
   AiOutlineCheckSquare,
@@ -85,6 +86,10 @@ const Home = () => {
     }
   };
 
+  const formatDate = date => {
+    return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(date));
+  }
+
   const blogs = data?.blogs || [];
 
   const handleGetBlog = _id => {
@@ -107,7 +112,7 @@ const Home = () => {
         blogs.map((blog: Blog) => {
           return (
             <div className="shadow-md hover:shadow-xl" key={blog._id} onClick={() => handleGetBlog(blog._id)}>
-              <Card sx={{ width: '80vw'}}>
+              <Card sx={{ width: '80vw' }}>
                 <CardContent className="flex flex-col gap-3 cursor-pointer">
                   <div className="flex justify-between items-center">
                     <div>
@@ -127,6 +132,10 @@ const Home = () => {
                           <MdOutlineCheckBoxOutlineBlank size={22} />
                         )}
                       </button> */}
+
+                      <p className="flex items-center pr-2">
+                        {formatDate(blog.createdAt)}
+                      </p>
 
                       <button
                         title="Update"

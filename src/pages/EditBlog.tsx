@@ -47,7 +47,7 @@ const EditBlog: FC = () => {
       toast.success(message, {
         duration: 2000,
       });
-      navigate("/");
+      // navigate("/");
     }
     if ("error" in response) {
       const {
@@ -82,7 +82,7 @@ const EditBlog: FC = () => {
       toast.success(message, {
         duration: 2000,
       });
-      navigate("/");
+      // navigate("/");
     }
     if ("error" in response) {
       const {
